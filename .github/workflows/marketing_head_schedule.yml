@@ -133,54 +133,21 @@ jobs:
           let msgPrefix = "";
 
           if (utcHour <= 4) { // 09:00 AM IST
-            title = "Today'\''s Client Delivery Deadlines";
-            msgPrefix = "📢 Today'\''s client delivery deadlines:";
+            title = "Today's Client Delivery Deadlines";
+            msgPrefix = "📢 Today's client delivery deadlines:";
           } else if (utcHour <= 6) { // 11:00 AM IST
             title = "Client Delivery Deadline Reminder";
-            msgPrefix = "📢 Reminder: Today'\''s client deliverables are due today.";
+            msgPrefix = "📢 Reminder: Today's client deliverables are due today.";
           } else if (utcHour <= 9) { // 02:00 PM IST
             title = "Client Delivery Check";
-            msgPrefix = "📢 Please track today'\''s pending client deliveries.";
+            msgPrefix = "📢 Please track today's pending client deliveries.";
           } else if (utcHour <= 12) { // 05:00 PM IST
             title = "Final Delivery Window";
             msgPrefix = "📢 Final delivery window approaching.";
           } else { // 07:00 PM IST
             title = "Client Delivery Deadline";
-            msgPrefix = "📢 Final reminder: Today'\''s client deliverables should be completed.";
+            msgPrefix = "📢 Final reminder: Today's client deliverables should be completed.";
           }
-
-          const messageBody = msgPrefix + "\n" + deliverables;
-
-          console.log("Sending Notification to Heena ji (agency_marketing_8186):");
-          console.log("Title: " + title);
-          console.log("Message:\n" + messageBody);
-
-          // HTTP POST request to ntfy
-          const postData = messageBody;
-          const reqOptions = {
-            hostname: "ntfy.sh",
-            port: 443,
-            path: "/agency_marketing_8186",
-            method: "POST",
-            headers: {
-              "Title": title,
-              "Content-Type": "text/plain; charset=utf-8",
-              "Content-Length": Buffer.byteLength(postData)
-            }
-          };
-
-          const req = https.request(reqOptions, (res) => {
-            console.log("Status Code: " + res.statusCode);
-          });
-
-          req.on("error", (e) => {
-            console.error(e);
-          });
-
-          req.write(postData);
-          req.end();
-          '
-
 
           const messageBody = msgPrefix + "\n" + deliverables;
 
