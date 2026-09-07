@@ -133,20 +133,20 @@ jobs:
           let msgPrefix = "";
 
           if (utcHour <= 4) { // 09:00 AM IST
-            title = "📢 Today'\''s Client Delivery Deadlines";
-            msgPrefix = "Today'\''s client delivery deadlines:";
+            title = "Today'\''s Client Delivery Deadlines";
+            msgPrefix = "📢 Today'\''s client delivery deadlines:";
           } else if (utcHour <= 6) { // 11:00 AM IST
-            title = "📢 Client Delivery Deadline Reminder";
-            msgPrefix = "Reminder: Today'\''s client deliverables are due today.";
+            title = "Client Delivery Deadline Reminder";
+            msgPrefix = "📢 Reminder: Today'\''s client deliverables are due today.";
           } else if (utcHour <= 9) { // 02:00 PM IST
-            title = "📢 Client Delivery Check";
-            msgPrefix = "Please track today'\''s pending client deliveries.";
+            title = "Client Delivery Check";
+            msgPrefix = "📢 Please track today'\''s pending client deliveries.";
           } else if (utcHour <= 12) { // 05:00 PM IST
-            title = "📢 Final Delivery Window";
-            msgPrefix = "Final delivery window approaching.";
+            title = "Final Delivery Window";
+            msgPrefix = "📢 Final delivery window approaching.";
           } else { // 07:00 PM IST
-            title = "📢 Client Delivery Deadline";
-            msgPrefix = "Final reminder: Today'\''s client deliverables should be completed.";
+            title = "Client Delivery Deadline";
+            msgPrefix = "📢 Final reminder: Today'\''s client deliverables should be completed.";
           }
 
           const messageBody = msgPrefix + "\n" + deliverables;
