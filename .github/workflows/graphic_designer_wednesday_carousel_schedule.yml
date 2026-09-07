@@ -1,0 +1,72 @@
+name: Graphic Designer Wednesday Carousel Review Schedule
+
+on:
+  schedule:
+    # UTC times corresponding to 09:00, 11:00, 14:00, 17:00, 19:00 IST on Wednesdays
+    # 09:00 IST = 03:30 UTC
+    # 11:00 IST = 05:30 UTC
+    # 14:00 IST = 08:30 UTC
+    # 17:00 IST = 11:30 UTC
+    # 19:00 IST = 13:30 UTC
+    - cron: '30 3,5,8,11,13 * * 3'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  graphic-designer-carousel-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process Graphic Designer Carousel Notification
+        run: |
+          # 1. Date & Year Validation (Active through December 2026)
+          YEAR=$(date +%Y)
+          if [ "$YEAR" -gt 2026 ]; then
+            echo "Workflow operation window has ended (Valid through Dec 2026). Exiting."
+            exit 0
+          fi
+
+          # 2. Dynamic Wednesday Index Calculation
+          DOM=$(date +%-d)
+          WEDNESDAY_INDEX=$(( ((DOM - 1) / 7) + 1 ))
+
+          # If 5th Wednesday of the month, do not send any notification
+          if [ "$WEDNESDAY_INDEX" -gt 4 ]; then
+            echo "5th Wednesday of the month detected (Day $DOM). No notification scheduled."
+            exit 0
+          fi
+
+          CAROUSEL_NUM=$WEDNESDAY_INDEX
+          TITLE="📚 Carousel Review"
+
+          # 3. Determine Message based on UTC Hour (09:00, 11:00, 14:00, 17:00, 19:00 IST)
+          HOUR_UTC=$(date +%-H)
+
+          case "$HOUR_UTC" in
+            3)
+              MSG="Carousel ${CAROUSEL_NUM} to be done for clients."
+              ;;
+            5)
+              MSG="Reminder: Carousel ${CAROUSEL_NUM} to be done for clients."
+              ;;
+            8)
+              MSG="Carousel ${CAROUSEL_NUM} should be ready for review."
+              ;;
+            11)
+              MSG="Final review time approaching — Carousel ${CAROUSEL_NUM}."
+              ;;
+            13)
+              MSG="Carousel ${CAROUSEL_NUM} final review reminder."
+              ;;
+            *)
+              MSG="Carousel ${CAROUSEL_NUM} review reminder."
+              ;;
+          esac
+
+          echo "Sending Carousel notification to Sathwika (agency_graphic_designer_8186):"
+          echo "Title: $TITLE"
+          echo "Message: $MSG"
+
+          # 4. Deliver push notification to agency_graphic_designer_8186
+          curl -s -o /dev/null \
+            -H "Title: $TITLE" \
+            -d "$MSG" \
+            https://ntfy.sh/agency_graphic_designer_8186
