@@ -8,7 +8,7 @@ on:
     # 14:00 IST = 08:30 UTC
     # 17:00 IST = 11:30 UTC
     # 19:00 IST = 13:30 UTC
-    - cron: '30 3,5,8,11,13 * * 1,2,3,4'
+    - cron: '30 3,5,8,11,13 * * *'
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
@@ -31,64 +31,99 @@ jobs:
           const formatter = new Intl.DateTimeFormat("en-CA", istOptions);
           const currentDate = formatter.format(now); // YYYY-MM-DD format
 
-          // Master Calendar Deliverables Mapping (Sept 2026 - Dec 2026)
+          // Master Calendar Actual Client Delivery Deadlines Mapping (Sept 2026 - Dec 2026)
           const scheduleMap = {
-            "2026-09-07": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — Poster 1, 2, 3",
-            "2026-09-09": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1\n- Astro Ratan — YouTube Video 1",
-            "2026-09-10": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1\n- Astro Ratan — AI Video 1, 2, 3",
-            "2026-09-14": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — Poster 4, 5",
-            "2026-09-16": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2\n- Astro Ratan — YouTube Video 2",
-            "2026-09-17": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2\n- Astro Ratan — AI Video 4, 5, 6",
-            "2026-09-21": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — Poster 6, 7, 8",
-            "2026-09-23": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3\n- Astro Ratan — YouTube Video 3",
-            "2026-09-24": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3\n- Astro Ratan — AI Video 7, 8, 9",
-            "2026-09-28": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — Poster 9, 10",
+            // --- SEPTEMBER 2026 ---
+            "2026-09-07": "- Astro Ratan — Poster 1, 2, 3",
+            "2026-09-09": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — YouTube Video 1",
+            "2026-09-10": "- Astro Ratan — AI Video 1, 2, 3",
+            "2026-09-11": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1",
+            "2026-09-12": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1",
+            "2026-09-14": "- Astro Ratan — Poster 4, 5",
+            "2026-09-16": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — YouTube Video 2",
+            "2026-09-17": "- Astro Ratan — AI Video 4, 5, 6",
+            "2026-09-18": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2",
+            "2026-09-19": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2",
+            "2026-09-21": "- Astro Ratan — Poster 6, 7, 8",
+            "2026-09-23": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — YouTube Video 3",
+            "2026-09-24": "- Astro Ratan — AI Video 7, 8, 9",
+            "2026-09-25": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3",
+            "2026-09-26": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3",
+            "2026-09-28": "- Astro Ratan — Poster 9, 10",
             "2026-09-29": "- Astro Ratan — AI Video 10",
-            "2026-09-30": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4\n- Astro Ratan — YouTube Video 4",
-            "2026-10-01": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4",
-            "2026-10-05": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — Poster 1, 2, 3",
-            "2026-10-07": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1\n- Astro Ratan — YouTube Video 1",
-            "2026-10-08": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1\n- Astro Ratan — AI Video 1, 2, 3",
-            "2026-10-12": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — Poster 4, 5",
-            "2026-10-14": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2\n- Astro Ratan — YouTube Video 2",
-            "2026-10-15": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2\n- Astro Ratan — AI Video 4, 5, 6",
-            "2026-10-19": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — Poster 6, 7, 8",
-            "2026-10-21": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3\n- Astro Ratan — YouTube Video 3",
-            "2026-10-22": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3\n- Astro Ratan — AI Video 7, 8, 9",
-            "2026-10-26": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — Poster 9, 10",
-            "2026-10-28": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4\n- Astro Ratan — YouTube Video 4",
-            "2026-10-29": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4\n- Astro Ratan — AI Video 10",
-            "2026-11-02": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — Poster 1, 2, 3",
-            "2026-11-04": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1\n- Astro Ratan — YouTube Video 1",
-            "2026-11-05": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1\n- Astro Ratan — AI Video 1, 2, 3",
-            "2026-11-09": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — Poster 4, 5",
-            "2026-11-11": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2\n- Astro Ratan — YouTube Video 2",
-            "2026-11-12": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2\n- Astro Ratan — AI Video 4, 5, 6",
-            "2026-11-16": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — Poster 6, 7, 8",
-            "2026-11-18": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3\n- Astro Ratan — YouTube Video 3",
-            "2026-11-19": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3\n- Astro Ratan — AI Video 7, 8, 9",
-            "2026-11-23": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — Poster 9, 10",
-            "2026-11-25": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4\n- Astro Ratan — YouTube Video 4",
-            "2026-11-26": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4\n- Astro Ratan — AI Video 10",
-            "2026-12-07": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — Poster 1, 2, 3",
-            "2026-12-09": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1\n- Astro Ratan — YouTube Video 1",
-            "2026-12-10": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1\n- Astro Ratan — AI Video 1, 2, 3",
-            "2026-12-14": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — Poster 4, 5",
-            "2026-12-16": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2\n- Astro Ratan — YouTube Video 2",
-            "2026-12-17": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2\n- Astro Ratan — AI Video 4, 5, 6",
-            "2026-12-21": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — Poster 6, 7, 8",
-            "2026-12-23": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3\n- Astro Ratan — YouTube Video 3",
-            "2026-12-24": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3\n- Astro Ratan — AI Video 7, 8, 9",
-            "2026-12-28": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — Poster 9, 10",
+            "2026-09-30": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — YouTube Video 4",
+            "2026-10-02": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4",
+            "2026-10-03": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4",
+
+            // --- OCTOBER 2026 ---
+            "2026-10-05": "- Astro Ratan — Poster 1, 2, 3",
+            "2026-10-07": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — YouTube Video 1",
+            "2026-10-08": "- Astro Ratan — AI Video 1, 2, 3",
+            "2026-10-09": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1",
+            "2026-10-10": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1",
+            "2026-10-12": "- Astro Ratan — Poster 4, 5",
+            "2026-10-14": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — YouTube Video 2",
+            "2026-10-15": "- Astro Ratan — AI Video 4, 5, 6",
+            "2026-10-16": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2",
+            "2026-10-17": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2",
+            "2026-10-19": "- Astro Ratan — Poster 6, 7, 8",
+            "2026-10-21": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — YouTube Video 3",
+            "2026-10-22": "- Astro Ratan — AI Video 7, 8, 9",
+            "2026-10-23": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3",
+            "2026-10-24": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3",
+            "2026-10-26": "- Astro Ratan — Poster 9, 10",
+            "2026-10-27": "- Astro Ratan — AI Video 10",
+            "2026-10-28": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — YouTube Video 4",
+            "2026-10-30": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4",
+            "2026-10-31": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4",
+
+            // --- NOVEMBER 2026 ---
+            "2026-11-02": "- Astro Ratan — Poster 1, 2, 3",
+            "2026-11-04": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — YouTube Video 1",
+            "2026-11-05": "- Astro Ratan — AI Video 1, 2, 3",
+            "2026-11-06": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1",
+            "2026-11-07": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1",
+            "2026-11-09": "- Astro Ratan — Poster 4, 5",
+            "2026-11-11": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — YouTube Video 2",
+            "2026-11-12": "- Astro Ratan — AI Video 4, 5, 6",
+            "2026-11-13": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2",
+            "2026-11-14": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2",
+            "2026-11-16": "- Astro Ratan — Poster 6, 7, 8",
+            "2026-11-18": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — YouTube Video 3",
+            "2026-11-19": "- Astro Ratan — AI Video 7, 8, 9",
+            "2026-11-20": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3",
+            "2026-11-21": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3",
+            "2026-11-23": "- Astro Ratan — Poster 9, 10",
+            "2026-11-24": "- Astro Ratan — AI Video 10",
+            "2026-11-25": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — YouTube Video 4",
+            "2026-11-27": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4",
+            "2026-11-28": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4",
+
+            // --- DECEMBER 2026 ---
+            "2026-12-07": "- Astro Ratan — Poster 1, 2, 3",
+            "2026-12-09": "- Icons Gym — Single Creative 1\n- Veto Gym — Single Creative 1\n- Vision Rainbow — Single Creative 1\n- Astro Ratan — YouTube Video 1",
+            "2026-12-10": "- Astro Ratan — AI Video 1, 2, 3",
+            "2026-12-11": "- Icons Gym — Carousel 1\n- Veto Gym — Carousel 1\n- Vision Rainbow — Carousel 1",
+            "2026-12-12": "- Icons Gym — Reel 1\n- Veto Gym — Reel 1\n- Vision Rainbow — Reel 1",
+            "2026-12-14": "- Astro Ratan — Poster 4, 5",
+            "2026-12-16": "- Icons Gym — Single Creative 2\n- Veto Gym — Single Creative 2\n- Vision Rainbow — Single Creative 2\n- Astro Ratan — YouTube Video 2",
+            "2026-12-17": "- Astro Ratan — AI Video 4, 5, 6",
+            "2026-12-18": "- Icons Gym — Carousel 2\n- Veto Gym — Carousel 2\n- Vision Rainbow — Carousel 2",
+            "2026-12-19": "- Icons Gym — Reel 2\n- Veto Gym — Reel 2\n- Vision Rainbow — Reel 2",
+            "2026-12-21": "- Astro Ratan — Poster 6, 7, 8",
+            "2026-12-23": "- Icons Gym — Single Creative 3\n- Veto Gym — Single Creative 3\n- Vision Rainbow — Single Creative 3\n- Astro Ratan — YouTube Video 3",
+            "2026-12-24": "- Astro Ratan — AI Video 7, 8, 9",
+            "2026-12-25": "- Icons Gym — Carousel 3\n- Veto Gym — Carousel 3\n- Vision Rainbow — Carousel 3",
+            "2026-12-26": "- Icons Gym — Reel 3\n- Veto Gym — Reel 3\n- Vision Rainbow — Reel 3",
+            "2026-12-28": "- Astro Ratan — Poster 9, 10",
             "2026-12-29": "- Astro Ratan — AI Video 10",
-            "2026-12-30": "- Icons Gym — Carousel 4\n- Veto Gym — Carousel 4\n- Vision Rainbow — Carousel 4\n- Astro Ratan — YouTube Video 4",
-            "2026-12-31": "- Icons Gym — Reel 4\n- Veto Gym — Reel 4\n- Vision Rainbow — Reel 4"
+            "2026-12-30": "- Icons Gym — Single Creative 4\n- Veto Gym — Single Creative 4\n- Vision Rainbow — Single Creative 4\n- Astro Ratan — YouTube Video 4"
           };
 
           const deliverables = scheduleMap[currentDate];
 
           if (!deliverables) {
-            console.log("No master review deadlines scheduled for today (" + currentDate + "). Exiting.");
+            console.log("No client delivery deadlines scheduled for today (" + currentDate + "). Exiting.");
             process.exit(0);
           }
 
@@ -98,21 +133,54 @@ jobs:
           let msgPrefix = "";
 
           if (utcHour <= 4) { // 09:00 AM IST
-            title = "📢 Today'\''s Creative Deadlines";
-            msgPrefix = "Today'\''s review deadlines:";
+            title = "📢 Today'\''s Client Delivery Deadlines";
+            msgPrefix = "Today'\''s client delivery deadlines:";
           } else if (utcHour <= 6) { // 11:00 AM IST
-            title = "📢 Creative Deadline Reminder";
-            msgPrefix = "Reminder: Today'\''s creative reviews are due today.";
+            title = "📢 Client Delivery Deadline Reminder";
+            msgPrefix = "Reminder: Today'\''s client deliverables are due today.";
           } else if (utcHour <= 9) { // 02:00 PM IST
-            title = "📢 Creative Deadline Check";
-            msgPrefix = "Please track today'\''s pending creative reviews.";
+            title = "📢 Client Delivery Check";
+            msgPrefix = "Please track today'\''s pending client deliveries.";
           } else if (utcHour <= 12) { // 05:00 PM IST
-            title = "📢 Final Review Window";
-            msgPrefix = "Final review window approaching.";
+            title = "📢 Final Delivery Window";
+            msgPrefix = "Final delivery window approaching.";
           } else { // 07:00 PM IST
-            title = "📢 Creative Deadline";
-            msgPrefix = "Final reminder: Today'\''s creative reviews should be completed.";
+            title = "📢 Client Delivery Deadline";
+            msgPrefix = "Final reminder: Today'\''s client deliverables should be completed.";
           }
+
+          const messageBody = msgPrefix + "\n" + deliverables;
+
+          console.log("Sending Notification to Heena ji (agency_marketing_8186):");
+          console.log("Title: " + title);
+          console.log("Message:\n" + messageBody);
+
+          // HTTP POST request to ntfy
+          const postData = messageBody;
+          const reqOptions = {
+            hostname: "ntfy.sh",
+            port: 443,
+            path: "/agency_marketing_8186",
+            method: "POST",
+            headers: {
+              "Title": title,
+              "Content-Type": "text/plain; charset=utf-8",
+              "Content-Length": Buffer.byteLength(postData)
+            }
+          };
+
+          const req = https.request(reqOptions, (res) => {
+            console.log("Status Code: " + res.statusCode);
+          });
+
+          req.on("error", (e) => {
+            console.error(e);
+          });
+
+          req.write(postData);
+          req.end();
+          '
+
 
           const messageBody = msgPrefix + "\n" + deliverables;
 
