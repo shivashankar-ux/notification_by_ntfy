@@ -2,57 +2,71 @@ name: Graphic Designer Monday Review Schedule
 
 on:
   schedule:
-    # Runs every Monday at 03:30 UTC (9:00 AM IST), 08:30 UTC (2:00 PM IST), and 13:30 UTC (7:00 PM IST)
-    - cron: '30 3,8,13 * * 1'
-  workflow_dispatch: # Allows manual trigger anytime from GitHub UI
+    # UTC times corresponding to 09:00, 11:00, 14:00, 17:00, 19:00 IST on Mondays
+    # 09:00 IST = 03:30 UTC
+    # 11:00 IST = 05:30 UTC
+    # 14:00 IST = 08:30 UTC
+    # 17:00 IST = 11:30 UTC
+    # 19:00 IST = 13:30 UTC
+    - cron: '30 3,5,8,11,13 * * 1'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
-  send-monday-review:
+  graphic-designer-review:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Graphic Designer Review Notification
+      - name: Process Graphic Designer Notification
         run: |
-          # Calculate current day of month
-          DAY_OF_MONTH=$(date +%-d)
-
-          # Determine Creative Number based on week of the month
-          if [ "$DAY_OF_MONTH" -le 7 ]; then
-            CREATIVE_NAME="Single Creative 1"
-          elif [ "$DAY_OF_MONTH" -le 14 ]; then
-            CREATIVE_NAME="Single Creative 2"
-          elif [ "$DAY_OF_MONTH" -le 21 ]; then
-            CREATIVE_NAME="Single Creative 3"
-          else
-            CREATIVE_NAME="Single Creative 4"
+          # 1. Date & Year Validation (Active through December 2026)
+          YEAR=$(date +%Y)
+          if [ "$YEAR" -gt 2026 ]; then
+            echo "Workflow operation window has ended (Valid through Dec 2026). Exiting."
+            exit 0
           fi
 
-          # Get current UTC hour to determine morning, mid-day, or evening message
+          # 2. Dynamic Monday Index Calculation
+          DOM=$(date +%-d)
+          MONDAY_INDEX=$(( ((DOM - 1) / 7) + 1 ))
+
+          # If 5th Monday of the month, do not send any notification
+          if [ "$MONDAY_INDEX" -gt 4 ]; then
+            echo "5th Monday of the month detected (Day $DOM). No notification scheduled."
+            exit 0
+          fi
+
+          CREATIVE_NUM=$MONDAY_INDEX
+          TITLE="🎨 Single Creative Review"
+
+          # 3. Determine Message based on UTC Hour (09:00, 11:00, 14:00, 17:00, 19:00 IST)
           HOUR_UTC=$(date +%-H)
 
-          if [ "$HOUR_UTC" -le 5 ]; then
-            TIME_LABEL="Morning Kickoff"
-            MSG="Good morning Sathwika! Today is review day for ${CREATIVE_NAME}. Please submit your initial drafts by 2:00 PM."
-            TAGS="art,calendar,warning"
-            PRIORITY="high"
-          elif [ "$HOUR_UTC" -le 10 ]; then
-            TIME_LABEL="Mid-day Check"
-            MSG="Mid-day reminder: Please upload your draft designs for ${CREATIVE_NAME} for client review."
-            TAGS="art,clock2"
-            PRIORITY="default"
-          else
-            TIME_LABEL="Evening Sign-off"
-            MSG="Final reminder for ${CREATIVE_NAME} reviews today. Deadline for Wednesday publishing."
-            TAGS="art,alarm_clock"
-            PRIORITY="high"
-          fi
+          case "$HOUR_UTC" in
+            3)
+              MSG="Single Creative ${CREATIVE_NUM} to be done for clients."
+              ;;
+            5)
+              MSG="Reminder: Single Creative ${CREATIVE_NUM} to be done for clients."
+              ;;
+            8)
+              MSG="Single Creative ${CREATIVE_NUM} should be ready for review."
+              ;;
+            11)
+              MSG="Final review time approaching — Single Creative ${CREATIVE_NUM}."
+              ;;
+            13)
+              MSG="Single Creative ${CREATIVE_NUM} final review reminder."
+              ;;
+            *)
+              MSG="Single Creative ${CREATIVE_NUM} review reminder."
+              ;;
+          esac
 
-          TITLE="🎨 Monday Review Day (${TIME_LABEL}) - ${CREATIVE_NAME}"
+          echo "Sending notification to Sathwika (agency_graphic_designer_8186):"
+          echo "Title: $TITLE"
+          echo "Message: $MSG"
 
-          echo "Publishing notification: $TITLE"
-
+          # 4. Deliver push notification to agency_graphic_designer_8186
           curl -s -o /dev/null \
             -H "Title: $TITLE" \
-            -H "Tags: $TAGS" \
-            -H "Priority: $PRIORITY" \
             -d "$MSG" \
             https://ntfy.sh/agency_graphic_designer_8186
