@@ -1,0 +1,65 @@
+name: Video Editor Thursday Reel Review Schedule
+
+on:
+  schedule:
+    # UTC times corresponding to 09:00, 11:00, 14:00, 17:00, 19:00 IST on Thursdays
+    # 09:00 IST = 03:30 UTC
+    # 11:00 IST = 05:30 UTC
+    # 14:00 IST = 08:30 UTC
+    # 17:00 IST = 11:30 UTC
+    # 19:00 IST = 13:30 UTC
+    - cron: '30 3,5,8,11,13 * * 4'
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  video-editor-reel-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process Video Editor Reel Notification
+        run: |
+          # 1. Dynamic Thursday Index Calculation
+          DOM=$(date +%-d)
+          THURSDAY_INDEX=$(( ((DOM - 1) / 7) + 1 ))
+
+          # If 5th Thursday of the month, do not send any notification
+          if [ "$THURSDAY_INDEX" -gt 4 ]; then
+            echo "5th Thursday of the month detected (Day $DOM). No notification scheduled."
+            exit 0
+          fi
+
+          REEL_NUM=$THURSDAY_INDEX
+          TITLE="🎬 Reel Review"
+
+          # 2. Determine Message based on UTC Hour (09:00, 11:00, 14:00, 17:00, 19:00 IST)
+          HOUR_UTC=$(date +%-H)
+
+          case "$HOUR_UTC" in
+            3)
+              MSG="Reel ${REEL_NUM} to be done for clients."
+              ;;
+            5)
+              MSG="Reminder: Reel ${REEL_NUM} to be done for clients."
+              ;;
+            8)
+              MSG="Reel ${REEL_NUM} should be ready for review."
+              ;;
+            11)
+              MSG="Final review time approaching — Reel ${REEL_NUM}."
+              ;;
+            13)
+              MSG="Reel ${REEL_NUM} final review reminder."
+              ;;
+            *)
+              MSG="Reel ${REEL_NUM} review reminder."
+              ;;
+          esac
+
+          echo "Sending Reel notification to Umesh (agency_video_editor_8186):"
+          echo "Title: $TITLE"
+          echo "Message: $MSG"
+
+          # 3. Deliver push notification to agency_video_editor_8186
+          curl -s -o /dev/null \
+            -H "Title: $TITLE" \
+            -d "$MSG" \
+            https://ntfy.sh/agency_video_editor_8186
