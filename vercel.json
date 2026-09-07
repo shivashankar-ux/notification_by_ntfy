@@ -1,6 +1,5 @@
 {
   "framework": "vite",
-  "rootDirectory": "web",
-  "buildCommand": "npm run build",
-  "outputDirectory": "build"
+  "buildCommand": "cd web && npm install && npm run build",
+  "outputDirectory": "web/build"
 }
